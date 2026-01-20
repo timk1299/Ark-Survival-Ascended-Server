@@ -25,7 +25,7 @@ RUN set -ex; \
     dpkg --add-architecture armhf; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
-    jq curl wget tar unzip nano gzip iproute2 procps software-properties-common dbus \
+    jq curl wget tar unzip nano gzip iproute2 procps dbus \
     tzdata \
     # tzdata package provides timezone database for TZ environment variable support \
     lib32gcc-s1-amd64-cross libglib2.0-0 libglib2.0-0:armhf libvulkan1 libvulkan1:armhf \
@@ -46,7 +46,6 @@ RUN set -ex; \
     mkdir -pm755 /etc/apt/keyrings; \
     #wget -O - https://dl.winehq.org/wine-builds/winehq.key | gpg --dearmor -o /etc/apt/keyrings/winehq-archive.key; \
     #wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/jammy/winehq-jammy.sources; \
-    add-apt-repository ppa:fex-emu/fex; \
     apt-get update; \
     # Install latest stable Wine
     #apt-get install -y --install-recommends winehq-stable; \
@@ -89,21 +88,19 @@ USER fex
 
 WORKDIR /home/fex
 
-# Clone the FEX repository and build it
-#RUN git clone --recurse-submodules https://github.com/FEX-Emu/FEX.git && \
-#    cd FEX && \
-#    mkdir Build && \
-#    cd Build && \
-#    CC=clang CXX=clang++ cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DUSE_LINKER=lld -DENABLE_LTO=True -DBUILD_TESTS=False -DENABLE_ASSERTIONS=False -G Ninja .. && \
-#    ninja
+#Clone the FEX repository and build it
+RUN git clone --recurse-submodules https://github.com/FEX-Emu/FEX.git && \
+    cd FEX && \
+    mkdir Build && \
+    cd Build && \
+    CC=clang CXX=clang++ cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DUSE_LINKER=lld -DENABLE_LTO=True -DBUILD_TESTS=False -DENABLE_ASSERTIONS=False -G Ninja .. && \
+    ninja
 
-#WORKDIR /home/fex/FEX/Build
+WORKDIR /home/fex/FEX/Build
 
-#RUN sudo ninja install && \
-#    sudo ninja binfmt_misc_32 && \
-#    sudo ninja binfmt_misc_64
-
-RUN curl --silent https://raw.githubusercontent.com/FEX-Emu/FEX/main/Scripts/InstallFEX.py | python3
+RUN sudo ninja install && \
+    sudo ninja binfmt_misc_32 && \
+    sudo ninja binfmt_misc_64
 
 RUN sudo useradd -m -s /bin/bash steam
 
