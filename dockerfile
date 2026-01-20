@@ -19,6 +19,8 @@ ENV WINEDLLOVERRIDES="version=n,b;vcrun2022=n,b"
 ENV WINEPREFIX="/home/pok/.steam/steam/steamapps/compatdata/2430930/pfx"
 ENV DISPLAY=:0.0
 
+USER root
+
 # Install necessary packages and setup for WineHQ repository
 RUN set -ex; \
     #dpkg --add-architecture i386; \
