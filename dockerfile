@@ -28,7 +28,7 @@ RUN set -ex; \
     jq curl wget tar unzip nano gzip iproute2 procps software-properties-common dbus \
     tzdata \
     # tzdata package provides timezone database for TZ environment variable support \
-    lib32gcc-s1 libglib2.0-0 libglib2.0-0:armhf libvulkan1 libvulkan1:armhf \
+    lib32gcc-s1-amd64-cross libglib2.0-0 libglib2.0-0:armhf libvulkan1 libvulkan1:armhf \
     libnss3 libnss3:armhf libgconf-2-4 libgconf-2-4:armhf \
     libfontconfig1 libfontconfig1:armhf libfreetype6 libfreetype6:armhf \
     libcups2 libcups2:armhf \
@@ -36,7 +36,7 @@ RUN set -ex; \
     # Add X server packages for headless operation
     xvfb x11-xserver-utils xauth libgl1-mesa-dri libgl1-mesa-glx \
     # Add necessary libraries for Wine and VC++
-    libldap-2.5-0:armhf libldap-2.5-0 libgnutls30:i386 libgnutls30 \
+    libldap-2.5-0:armhf libldap-2.5-0 libgnutls30:armhf libgnutls30 \
     libxml2:armhf libxml2 libasound2:armhf libasound2 libpulse0:armhf libpulse0 \
     libopenal1:armhf libopenal1 libncurses6:armhf libncurses6 \
     # DO NOT ENABLE screen package - causes log display issues which is needed by the POK-manager.sh script
