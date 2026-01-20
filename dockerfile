@@ -43,8 +43,7 @@ RUN set -ex; \
     # cabextract is essential for winetricks vcrun2019 installation
     cabextract winbind \
     # Install dependencies for fex-emu
-    git cmake ninja-build ccache clang llvm lld binfmt-support libsdl2-dev libepoxy-dev libssl-dev python-setuptools g++-x86-64-linux-gnu \
-    #pgk-config \
+    git cmake ninja-build ccache pkg-config clang llvm lld binfmt-support libsdl2-dev libepoxy-dev libssl-dev python-setuptools g++-x86-64-linux-gnu \
     nasm python3-clang libstdc++-10-dev-i386-cross libstdc++-10-dev-amd64-cross libstdc++-10-dev-arm64-cross squashfs-tools squashfuse libc-bin expect curl sudo fuse; \
 
     # Setup WineHQ repository
