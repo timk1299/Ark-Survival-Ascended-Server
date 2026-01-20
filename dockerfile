@@ -21,24 +21,24 @@ ENV DISPLAY=:0.0
 
 # Install necessary packages and setup for WineHQ repository
 RUN set -ex; \
-    dpkg --add-architecture i386; \
+    #dpkg --add-architecture i386; \
     dpkg --add-architecture armhf; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
     jq curl wget tar unzip nano gzip iproute2 procps software-properties-common dbus \
     tzdata \
     # tzdata package provides timezone database for TZ environment variable support \
-    lib32gcc-s1 libglib2.0-0 libglib2.0-0:i386 libglib2.0-0:armhf libvulkan1 libvulkan1:i386 libvulkan1:armhf \
-    libnss3 libnss3:i386 libgconf-2-4 libgconf-2-4:i386 \
-    libfontconfig1 libfontconfig1:i386 libfreetype6 libfreetype6:i386 \
-    libcups2 libcups2:i386 \
+    lib32gcc-s1 libglib2.0-0 libglib2.0-0:armhf libvulkan1 libvulkan1:armhf \
+    libnss3 libnss3:armhf libgconf-2-4 libgconf-2-4:armhf \
+    libfontconfig1 libfontconfig1:armhf libfreetype6 libfreetype6:armhf \
+    libcups2 libcups2:armhf \
     gnupg2 ca-certificates \
     # Add X server packages for headless operation
     xvfb x11-xserver-utils xauth libgl1-mesa-dri libgl1-mesa-glx \
     # Add necessary libraries for Wine and VC++
-    libldap-2.5-0:i386 libldap-2.5-0 libgnutls30:i386 libgnutls30 \
-    libxml2:i386 libxml2 libasound2:i386 libasound2 libpulse0:i386 libpulse0 \
-    libopenal1:i386 libopenal1 libncurses6:i386 libncurses6 \
+    libldap-2.5-0:armhf libldap-2.5-0 libgnutls30:i386 libgnutls30 \
+    libxml2:armhf libxml2 libasound2:armhf libasound2 libpulse0:armhf libpulse0 \
+    libopenal1:armhf libopenal1 libncurses6:armhf libncurses6 \
     # DO NOT ENABLE screen package - causes log display issues which is needed by the POK-manager.sh script
     # cabextract is essential for winetricks vcrun2019 installation
     cabextract winbind; \
