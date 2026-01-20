@@ -19,6 +19,10 @@ ENV WINEDLLOVERRIDES="version=n,b;vcrun2022=n,b"
 ENV WINEPREFIX="/home/pok/.steam/steam/steamapps/compatdata/2430930/pfx"
 ENV DISPLAY=:0.0
 
+USER steam
+WORKDIR /home/steam/Steam
+RUN FEXBash ./steamcmd.sh
+
 USER root
 
 # Install necessary packages and setup for WineHQ repository
