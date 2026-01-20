@@ -22,12 +22,13 @@ ENV DISPLAY=:0.0
 # Install necessary packages and setup for WineHQ repository
 RUN set -ex; \
     dpkg --add-architecture i386; \
+    dpkg --add-architecture armhf; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
     jq curl wget tar unzip nano gzip iproute2 procps software-properties-common dbus \
     tzdata \
     # tzdata package provides timezone database for TZ environment variable support \
-    lib32gcc-s1 libglib2.0-0 libglib2.0-0:i386 libvulkan1 libvulkan1:i386 \
+    lib32gcc-s1 libglib2.0-0 libglib2.0-0:i386 libglib2.0-0:armhf libvulkan1 libvulkan1:i386 libvulkan1:armhf \
     libnss3 libnss3:i386 libgconf-2-4 libgconf-2-4:i386 \
     libfontconfig1 libfontconfig1:i386 libfreetype6 libfreetype6:i386 \
     libcups2 libcups2:i386 \
@@ -43,14 +44,18 @@ RUN set -ex; \
     cabextract winbind; \
     # Setup WineHQ repository
     mkdir -pm755 /etc/apt/keyrings; \
-    wget -O - https://dl.winehq.org/wine-builds/winehq.key | gpg --dearmor -o /etc/apt/keyrings/winehq-archive.key; \
-    wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/jammy/winehq-jammy.sources; \
+    #wget -O - https://dl.winehq.org/wine-builds/winehq.key | gpg --dearmor -o /etc/apt/keyrings/winehq-archive.key; \
+    #wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/jammy/winehq-jammy.sources; \
     apt-get update; \
     # Install latest stable Wine
-    apt-get install -y --install-recommends winehq-stable; \
+    #apt-get install -y --install-recommends winehq-stable; \
+    apt-get install -y --install-recommends wine-stable; \
     # Cleanup to keep the image lean
     apt-get clean; \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/*; \
+    # Install dependencies for fex-emu
+    apt-get install -y git cmake ninja-build pgk-config ccache clang llvm lld binfmt-support libsdl2-dev libepoxy-dev libssl-dev python-setuptools g++-x86-64-linux-gnu \
+    nasm python3-clang libstdc++-10-dev-i386-cross libstdc++-10-dev-amd64-cross libstdc++-10-dev-arm64-cross squashfs-tools squashfuse libc-bin expect curl sudo fuse
 
 # Setup winetricks for Visual C++ Redistributable installation
 RUN set -ex; \
@@ -68,10 +73,59 @@ RUN set -ex; \
     mkdir -p /home/pok/arkserver/ShooterGame/Saved/SavedArks; \
     mkdir -p /home/pok/arkserver/ShooterGame/Saved/Logs
 
-# Setup working directory for steamcmd
-WORKDIR /opt/steamcmd
-RUN set -ex; \
-    wget -qO- https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz | tar zxvf -
+# Create a new user for fex-emu and set their home directory
+RUN useradd -m -s /bin/bash fex
+
+RUN usermod -aG sudo fex
+
+RUN echo "fex ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/fex
+
+USER fex
+
+WORKDIR /home/fex
+
+# Clone the FEX repository and build it
+RUN git clone --recurse-submodules https://github.com/FEX-Emu/FEX.git && \
+    cd FEX && \
+    mkdir Build && \
+    cd Build && \
+    CC=clang CXX=clang++ cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DUSE_LINKER=lld -DENABLE_LTO=True -DBUILD_TESTS=False -DENABLE_ASSERTIONS=False -G Ninja .. && \
+    ninja
+
+WORKDIR /home/fex/FEX/Build
+
+RUN sudo ninja install && \
+    sudo ninja binfmt_misc_32 && \
+    sudo ninja binfmt_misc_64
+
+RUN sudo useradd -m -s /bin/bash steam
+
+RUN sudo apt install wget
+
+USER root
+
+RUN echo 'root:steamcmd' | chpasswd
+
+USER steam
+
+WORKDIR /home/steam/.fex-emu/RootFS/
+
+# Set up rootfs
+
+RUN wget -O Ubuntu_22_04.tar.gz https://www.dropbox.com/scl/fi/16mhn3jrwvzapdw50gt20/Ubuntu_22_04.tar.gz?rlkey=4m256iahwtcijkpzcv8abn7nf
+
+RUN tar xzf Ubuntu_22_04.tar.gz
+
+RUN rm ./Ubuntu_22_04.tar.gz
+
+WORKDIR /home/steam/.fex-emu
+
+RUN echo '{"Config":{"RootFS":"Ubuntu_22_04"}}' > ./Config.json
+
+WORKDIR /home/steam/Steam
+
+# Download and run SteamCMD
+RUN curl -sqL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf -
 
 # Setup the Proton GE with proper version handling
 WORKDIR /usr/local/bin
