@@ -44,7 +44,7 @@ RUN set -ex; \
     cabextract winbind \
     # Install dependencies for fex-emu
     git cmake ninja-build ccache pkg-config clang llvm lld binfmt-support libsdl2-dev libepoxy-dev libssl-dev python-setuptools g++-x86-64-linux-gnu \
-    nasm python3-clang libstdc++-10-dev-i386-cross libstdc++-10-dev-amd64-cross libstdc++-10-dev-arm64-cross squashfs-tools squashfuse libc-bin expect curl sudo fuse; \
+    nasm python3-clang python libstdc++-10-dev-i386-cross libstdc++-10-dev-amd64-cross libstdc++-10-dev-arm64-cross squashfs-tools squashfuse libc-bin expect curl sudo fuse; \
 
     # Setup WineHQ repository
     mkdir -pm755 /etc/apt/keyrings; \
