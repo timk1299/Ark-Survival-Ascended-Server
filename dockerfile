@@ -22,7 +22,6 @@ ENV DISPLAY=:0.0
 # Install necessary packages and setup for WineHQ repository
 RUN set -ex; \
     #dpkg --add-architecture i386; \
-    add-apt-repository ppa:fex-emu/fex; \
     dpkg --add-architecture armhf; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
@@ -42,11 +41,12 @@ RUN set -ex; \
     libopenal1:armhf libopenal1 libncurses6:armhf libncurses6 \
     # DO NOT ENABLE screen package - causes log display issues which is needed by the POK-manager.sh script
     # cabextract is essential for winetricks vcrun2019 installation
-    cabextract winbind; \
+    cabextract winbind software-properties-common; \
     # Setup WineHQ repository
     mkdir -pm755 /etc/apt/keyrings; \
     #wget -O - https://dl.winehq.org/wine-builds/winehq.key | gpg --dearmor -o /etc/apt/keyrings/winehq-archive.key; \
     #wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/jammy/winehq-jammy.sources; \
+    add-apt-repository ppa:fex-emu/fex; \
     apt-get update; \
     # Install latest stable Wine
     #apt-get install -y --install-recommends winehq-stable; \
