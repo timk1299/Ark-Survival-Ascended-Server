@@ -22,6 +22,7 @@ ENV DISPLAY=:0.0
 # Install necessary packages and setup for WineHQ repository
 RUN set -ex; \
     #dpkg --add-architecture i386; \
+    add-apt-repository ppa:fex-emu/fex; \
     dpkg --add-architecture armhf; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
@@ -42,10 +43,7 @@ RUN set -ex; \
     # DO NOT ENABLE screen package - causes log display issues which is needed by the POK-manager.sh script
     # cabextract is essential for winetricks vcrun2019 installation
     cabextract winbind \
-    # Install dependencies for fex-emu
-    git cmake ninja-build ccache pkg-config clang llvm lld binfmt-support libsdl2-dev libepoxy-dev libssl-dev python-setuptools g++-x86-64-linux-gnu \
-    nasm python3-clang libstdc++-10-dev-i386-cross libstdc++-10-dev-amd64-cross libstdc++-10-dev-arm64-cross squashfs-tools squashfuse libc-bin expect curl sudo fuse; \
-
+    
     # Setup WineHQ repository
     mkdir -pm755 /etc/apt/keyrings; \
     #wget -O - https://dl.winehq.org/wine-builds/winehq.key | gpg --dearmor -o /etc/apt/keyrings/winehq-archive.key; \
@@ -53,11 +51,18 @@ RUN set -ex; \
     apt-get update; \
     # Install latest stable Wine
     #apt-get install -y --install-recommends winehq-stable; \
-    apt-get install -y --install-recommends wine-stable; \
+    apt-get install -y --install-recommends wine-stable;
     # Cleanup to keep the image lean
-    apt-get clean; \
-    rm -rf /var/lib/apt/lists/*;
 
+# Install dependencies for fex-emu
+RUN apt-get install -y \
+    git cmake ninja-build ccache pkg-config clang llvm lld binfmt-support libsdl2-dev libepoxy-dev libssl-dev python-setuptools g++-x86-64-linux-gnu \
+    nasm python3-clang libstdc++-10-dev-i386-cross libstdc++-10-dev-amd64-cross libstdc++-10-dev-arm64-cross squashfs-tools squashfuse libc-bin expect curl sudo fuse
+
+
+RUN set -ex; \
+    apt-get clean; \
+    rm -rf /var/lib/apt/lists/*
 # Setup winetricks for Visual C++ Redistributable installation
 RUN set -ex; \
     wget https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks -O /usr/local/bin/winetricks && \
