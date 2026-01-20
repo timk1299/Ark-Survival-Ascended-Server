@@ -19,9 +19,9 @@ ENV WINEDLLOVERRIDES="version=n,b;vcrun2022=n,b"
 ENV WINEPREFIX="/home/pok/.steam/steam/steamapps/compatdata/2430930/pfx"
 ENV DISPLAY=:0.0
 
-USER steam
-WORKDIR /home/steam/Steam
-RUN FEXBash ./steamcmd.sh
+#USER steam
+#WORKDIR /home/steam/Steam
+#ENTRYPOINT FEXBash ./steamcmd.sh
 
 USER root
 
@@ -224,7 +224,7 @@ RUN set -ex; \
     chown -R pok:pok /home/pok; \
     chown -R pok:pok /home/pok/arkserver; \
     chown -R pok:pok /home/pok/.steam; \
-    chown -R pok:pok /opt/steamcmd; \
+    #chown -R pok:pok /opt/steamcmd; \
     # Ensure all critical directories have proper permissions
     find /home/pok/arkserver -type d -exec chmod 755 {} \;; \
     # Make logs directory world-writable to avoid permission issues
