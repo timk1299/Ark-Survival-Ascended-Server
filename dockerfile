@@ -42,8 +42,7 @@ RUN set -ex; \
     libopenal1:armhf libopenal1 libncurses6:armhf libncurses6 \
     # DO NOT ENABLE screen package - causes log display issues which is needed by the POK-manager.sh script
     # cabextract is essential for winetricks vcrun2019 installation
-    cabextract winbind \
-    
+    cabextract winbind; \
     # Setup WineHQ repository
     mkdir -pm755 /etc/apt/keyrings; \
     #wget -O - https://dl.winehq.org/wine-builds/winehq.key | gpg --dearmor -o /etc/apt/keyrings/winehq-archive.key; \
