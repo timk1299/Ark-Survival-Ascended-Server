@@ -27,6 +27,7 @@ RUN set -ex; \
     apt-get install -y --no-install-recommends \
     jq curl wget tar unzip nano gzip iproute2 procps software-properties-common dbus \
     tzdata \
+    git\
     # tzdata package provides timezone database for TZ environment variable support \
     lib32gcc-s1-amd64-cross libglib2.0-0 libglib2.0-0:armhf libvulkan1 libvulkan1:armhf \
     libnss3 libnss3:armhf libgconf-2-4 libgconf-2-4:armhf \
@@ -54,8 +55,8 @@ RUN set -ex; \
     apt-get clean; \
     rm -rf /var/lib/apt/lists/*; \
     # Install dependencies for fex-emu
-    apt-get install -y git cmake ninja-build pgk-config ccache clang llvm lld binfmt-support libsdl2-dev libepoxy-dev libssl-dev python-setuptools g++-x86-64-linux-gnu \
-    nasm python3-clang libstdc++-10-dev-i386-cross libstdc++-10-dev-amd64-cross libstdc++-10-dev-arm64-cross squashfs-tools squashfuse libc-bin expect curl sudo fuse
+    #apt-get install -y git cmake ninja-build pgk-config ccache clang llvm lld binfmt-support libsdl2-dev libepoxy-dev libssl-dev python-setuptools g++-x86-64-linux-gnu \
+    #nasm python3-clang libstdc++-10-dev-i386-cross libstdc++-10-dev-amd64-cross libstdc++-10-dev-arm64-cross squashfs-tools squashfuse libc-bin expect curl sudo fuse
 
 # Setup winetricks for Visual C++ Redistributable installation
 RUN set -ex; \
