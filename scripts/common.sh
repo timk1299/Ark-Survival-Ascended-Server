@@ -739,7 +739,7 @@ steamcmd_download_to_dir() {
     echo "[INFO] SteamCMD validation enabled for this run"
   fi
 
-  /opt/steamcmd/steamcmd.sh \
+ FEXBash /opt/steamcmd/steamcmd.sh \
     +force_install_dir "$target_dir" \
     +login "$USERNAME" \
     +app_update $update_args \

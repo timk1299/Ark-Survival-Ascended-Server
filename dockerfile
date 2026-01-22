@@ -34,7 +34,7 @@ RUN set -ex; \
     jq curl wget tar unzip nano gzip iproute2 procps dbus \
     tzdata \
     # tzdata package provides timezone database for TZ environment variable support \
-    lib32gcc-s1-amd64-cross libglib2.0-0 libglib2.0-0:armhf libvulkan1 libvulkan1:armhf \
+    libgcc-s1:armhf libglib2.0-0 libglib2.0-0:armhf libvulkan1 libvulkan1:armhf \
     libnss3 libnss3:armhf libgconf-2-4 libgconf-2-4:armhf \
     libfontconfig1 libfontconfig1:armhf libfreetype6 libfreetype6:armhf \
     libcups2 libcups2:armhf \
@@ -292,4 +292,5 @@ USER pok
 WORKDIR /home/pok
 
 # Use tini as the entrypoint  
-ENTRYPOINT ["/tini", "--", "/home/pok/scripts/init.sh"]
+#ENTRYPOINT ["/tini", "--", "/home/pok/scripts/init.sh"]
+ENTRYPOINT /home/pok/scripts/init.sh
