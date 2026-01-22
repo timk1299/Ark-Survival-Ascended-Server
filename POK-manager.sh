@@ -3948,7 +3948,7 @@ get_current_build_id() {
     cleanup_container=true
   fi
   
-  local steamcmd_output=$($docker_cmd exec "$existing_container" /opt/steamcmd/steamcmd.sh +login anonymous +app_info_print $app_id +quit 2>/dev/null)
+  local steamcmd_output=$($docker_cmd exec "$existing_container" FEXBash /opt/steamcmd/steamcmd.sh +login anonymous +app_info_print $app_id +quit 2>/dev/null)
   
   if [ "$cleanup_container" = true ]; then
     $docker_cmd rm -f "$existing_container" > /dev/null 2>&1 || true

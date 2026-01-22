@@ -55,7 +55,7 @@ RUN set -ex; \
     apt-get update; \
     # Install latest stable Wine
     #apt-get install -y --install-recommends winehq-stable; \
-    apt-get install -y --install-recommends wine-stable;
+    apt-get install -y --install-recommends wine-stable
     # Cleanup to keep the image lean
 
 # Install dependencies for fex-emu
@@ -63,6 +63,8 @@ RUN set -ex; \
 #    git cmake ninja-build ccache pkg-config clang llvm lld binfmt-support libsdl2-dev libepoxy-dev libssl-dev python-setuptools g++-x86-64-linux-gnu \
 #    nasm python3-clang libstdc++-10-dev-i386-cross libstdc++-10-dev-amd64-cross libstdc++-10-dev-arm64-cross squashfs-tools squashfuse libc-bin expect curl sudo fuse
 
+RUN mkdir /opt/steamcmd
+RUN cp -r /home/steam/Steam/* /opt/steamcmd/
 
 RUN set -ex; \
     apt-get clean; \
@@ -224,7 +226,7 @@ RUN set -ex; \
     chown -R pok:pok /home/pok; \
     chown -R pok:pok /home/pok/arkserver; \
     chown -R pok:pok /home/pok/.steam; \
-    #chown -R pok:pok /opt/steamcmd; \
+    chown -R pok:pok /opt/steamcmd; \
     # Ensure all critical directories have proper permissions
     find /home/pok/arkserver -type d -exec chmod 755 {} \;; \
     # Make logs directory world-writable to avoid permission issues
