@@ -1,5 +1,5 @@
 #FROM ubuntu:22.04
-FROM teriyakigod/steamcmd:arm64
+FROM internal/steamcmd-docker-arm64
 # IMPORTANT: These values are set at build time and CANNOT be changed at runtime
 # The container has fixed user IDs:
 # - 2_0_latest image: PUID=1000, PGID=1000
@@ -34,7 +34,7 @@ RUN set -ex; \
     jq curl wget tar unzip nano gzip iproute2 procps dbus \
     tzdata \
     # tzdata package provides timezone database for TZ environment variable support \
-    libgcc-s1:armhf libglib2.0-0 libglib2.0-0:armhf libvulkan1 libvulkan1:armhf \
+    libc6:armhf libgcc-s1:armhf libglib2.0-0 libglib2.0-0:armhf libvulkan1 libvulkan1:armhf \
     libnss3 libnss3:armhf libgconf-2-4 libgconf-2-4:armhf \
     libfontconfig1 libfontconfig1:armhf libfreetype6 libfreetype6:armhf \
     libcups2 libcups2:armhf \
@@ -47,7 +47,7 @@ RUN set -ex; \
     libopenal1:armhf libopenal1 libncurses6:armhf libncurses6 \
     # DO NOT ENABLE screen package - causes log display issues which is needed by the POK-manager.sh script
     # cabextract is essential for winetricks vcrun2019 installation
-    cabextract winbind software-properties-common; \
+    cabextract winbind software-properties-common strace; \
     # Setup WineHQ repository
     mkdir -pm755 /etc/apt/keyrings; \
     #wget -O - https://dl.winehq.org/wine-builds/winehq.key | gpg --dearmor -o /etc/apt/keyrings/winehq-archive.key; \
@@ -305,5 +305,4 @@ RUN echo '{"Config":{"RootFS":"Ubuntu_22_04"}}' > ./Config.json
 WORKDIR /home/pok
 
 # Use tini as the entrypoint  
-#ENTRYPOINT ["/tini", "--", "/home/pok/scripts/init.sh"]
-ENTRYPOINT /home/pok/scripts/init.sh
+ENTRYPOINT ["/tini", "--", "FEXBash /home/pok/scripts/init.sh"]
