@@ -468,7 +468,7 @@ get_current_build_id() {
     echo "[DEBUG] Retrieving build ID directly from SteamCMD (not using API)..."
   fi
   
-  local steamcmd_output=$(/opt/steamcmd/steamcmd.sh +login anonymous +app_info_print ${APPID} +quit 2>/dev/null)
+  local steamcmd_output=$(FEXBash /opt/steamcmd/steamcmd.sh +login anonymous +app_info_print ${APPID} +quit 2>/dev/null)
   
   # More precise extraction to avoid multiple matches
   # 1. Find the "branches" section
@@ -738,7 +738,7 @@ steamcmd_download_to_dir() {
     update_args="$update_args validate"
     echo "[INFO] SteamCMD validation enabled for this run"
   fi
-  /opt/steamcmd/steamcmd.sh \
+  FEXBash /opt/steamcmd/steamcmd.sh \
     +force_install_dir "$target_dir" \
     +login "$USERNAME" \
     +app_update $update_args \
