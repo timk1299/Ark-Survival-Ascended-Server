@@ -501,7 +501,7 @@ start_server() {
               # Set DISPLAY variable to prevent X server errors
               export DISPLAY=:0.0
               # Method 1: Direct Proton launch using found executable
-              "$PROTON_EXECUTABLE" run "$binary" $params > /tmp/launch_output.log 2>&1 &
+              FEXBash "$PROTON_EXECUTABLE" run "$binary" $params > /tmp/launch_output.log 2>&1 &
             else
               echo "[WARNING] Proton executable not found, skipping this method."
               return 1
@@ -615,7 +615,7 @@ start_server() {
               # Set DISPLAY variable to prevent X server errors
               export DISPLAY=:0.0
               # Method 1: Direct Proton launch using found executable
-              "$PROTON_EXECUTABLE" run "$binary" $params > /tmp/launch_output.log 2>&1 &
+              FEXBash "$PROTON_EXECUTABLE" run "$binary" $params > /tmp/launch_output.log 2>&1 &
             else
               echo "[WARNING] Proton executable not found, skipping this method."
               return 1
@@ -741,7 +741,7 @@ start_server() {
     # Try first with the found Proton executable
     if [ -f "$PROTON_EXECUTABLE" ]; then
       echo "Launching with found Proton executable: $PROTON_EXECUTABLE"
-      "$PROTON_EXECUTABLE" run "$LAUNCH_BINARY_NAME" $server_params &
+      FEXBash "$PROTON_EXECUTABLE" run "$LAUNCH_BINARY_NAME" $server_params &
       SERVER_PID=$!
       
       # Wait a moment to see if the server started correctly
