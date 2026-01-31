@@ -305,4 +305,5 @@ RUN echo '{"Config":{"RootFS":"Ubuntu_22_04"}}' > ./Config.json
 WORKDIR /home/pok
 
 # Use tini as the entrypoint  
-ENTRYPOINT ["/tini", "--", "/home/pok/scripts/init.sh"]
+ENTRYPOINT ["/tini", "--"]
+CMD ["FEXBash", "/home/pok/scripts/init.sh"]
